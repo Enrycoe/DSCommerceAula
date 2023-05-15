@@ -2,19 +2,18 @@ package com.henriqueardina.dscommerce.entities;
 
 import java.time.Instant;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+
 @Entity
-@Table(name = "tb_order")
-public class Order {
+@Table(name = "tb_payment")
+public class Payment {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,16 +22,18 @@ public class Order {
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant moment;
 	
-	private OrderStatus status;
+	@OneToOne
+	@MapsId
+	private Order order;
 	
-	@ManyToOne
-	@JoinColumn(name = "client_id")
-	private User client;
-	
-	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
-	private Payment payment;
-	
-	public Order() {
+	public Payment() {
+	}
+
+	public Payment(Long id, Instant moment, Order order) {
+		super();
+		this.id = id;
+		this.moment = moment;
+		this.order = order;
 	}
 
 	public Long getId() {
@@ -51,35 +52,14 @@ public class Order {
 		this.moment = moment;
 	}
 
-	public OrderStatus getStatus() {
-		return status;
+	public Order getOrder() {
+		return order;
 	}
 
-	public void setStatus(OrderStatus status) {
-		this.status = status;
+	public void setOrder(Order order) {
+		this.order = order;
 	}
-
-	public User getClient() {
-		return client;
-	}
-
-	public void setClient(User client) {
-		this.client = client;
-	}
-
-	public Payment getPayment() {
-		return payment;
-	}
-
-	public void setPayment(Payment payment) {
-		this.payment = payment;
-	}
-	
-	
-	
 	
 	
 	
 }
-
-
